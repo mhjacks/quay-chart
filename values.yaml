@@ -89,7 +89,7 @@ secretStore:
 quayConfig:
   credentials:
     # -- Vault (or other backend) path extracted into quay-config-credentials.
-    key: secret/data/hub/infra/quay/quay-users
+    key: secret/data/hub/quay-users
   # Exactly one user must set initialize, and that user must be a superuser.
   # Organization names must be at least four characters. Repository names
   # use the namespace/name form.
@@ -100,17 +100,27 @@ quayConfig:
       passwordProperty: quay-admin-password
       superuser: true
       initialize: true
-    - name: developer1
-      email: developer1@myorg.com
-      passwordProperty: quay-user-password
-      superuser: false
-      initialize: false
-  organizations:
-    - name: devel
-      email: devel@myorg.com
-  repositories:
-    - name: devel/example
-      visibility: private
+  organizations: []
+  repositories: []
+
+#  users:
+#    - name: quayadmin
+#      email: quayadmin@example.com
+#      # -- Property on credentials.key projected into the credentials Secret.
+#      passwordProperty: quay-admin-password
+#      superuser: true
+#      initialize: true
+#    - name: developer1
+#      email: developer1@myorg.com
+#      passwordProperty: quay-user-password
+#      superuser: false
+#      initialize: false
+#  organizations:
+#    - name: devel
+#      email: devel@myorg.com
+#  repositories:
+#    - name: devel/example
+#      visibility: private
 
 consoleLink:
   # -- Create an ApplicationMenu ConsoleLink for the Quay route.

@@ -85,21 +85,14 @@ This chart is used to serve as the template for Validated Patterns Charts
 | quay.namespace | string | `"quay-enterprise"` | Namespace for the Quay registry and its configuration jobs. |
 | quay.storage.clairpostgres.size | string | `"50Gi"` | Persistent volume size for the Clair PostgreSQL database. |
 | quay.storage.postgres.size | string | `"50Gi"` | Persistent volume size for the Quay PostgreSQL database. |
-| quayConfig.credentials.key | string | `"secret/data/hub/infra/quay/quay-users"` | Vault (or other backend) path extracted into quay-config-credentials. |
-| quayConfig.organizations[0].email | string | `"devel@myorg.com"` |  |
-| quayConfig.organizations[0].name | string | `"devel"` |  |
-| quayConfig.repositories[0].name | string | `"devel/example"` |  |
-| quayConfig.repositories[0].visibility | string | `"private"` |  |
+| quayConfig.credentials.key | string | `"secret/data/hub/quay-users"` | Vault (or other backend) path extracted into quay-config-credentials. |
+| quayConfig.organizations | list | `[]` |  |
+| quayConfig.repositories | list | `[]` |  |
 | quayConfig.users[0].email | string | `"quayadmin@example.com"` |  |
 | quayConfig.users[0].initialize | bool | `true` |  |
 | quayConfig.users[0].name | string | `"quayadmin"` |  |
 | quayConfig.users[0].passwordProperty | string | `"quay-admin-password"` | Property on credentials.key projected into the credentials Secret. |
 | quayConfig.users[0].superuser | bool | `true` |  |
-| quayConfig.users[1].email | string | `"developer1@myorg.com"` |  |
-| quayConfig.users[1].initialize | bool | `false` |  |
-| quayConfig.users[1].name | string | `"developer1"` |  |
-| quayConfig.users[1].passwordProperty | string | `"quay-user-password"` |  |
-| quayConfig.users[1].superuser | bool | `false` |  |
 | secretStore.kind | string | `"ClusterSecretStore"` | Kind of secretStore.name. |
 | secretStore.name | string | `"vault-backend"` | SecretStore or ClusterSecretStore that holds Quay user passwords. |
 <!-- markdownlint-enable MD013 MD034 MD060 -->
