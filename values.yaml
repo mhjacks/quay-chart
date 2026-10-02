@@ -27,7 +27,7 @@ job:
   # -- Image for the S3 credentials Job. Uses the OpenShift cli ImageStream,
   # which tracks the cluster version. Override when the internal
   # registry is unavailable, for example ose-cli-rhel9:v4.20.
-  image: "quay.io/validatedpatterns/imperative-image:v1"
+  image: "quay.io/validatedpatterns/imperative-container:v1"
   resources:
     requests:
       cpu: 50m

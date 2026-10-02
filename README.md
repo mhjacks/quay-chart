@@ -57,7 +57,7 @@ This chart is used to serve as the template for Validated Patterns Charts
 | consoleLink.section | string | `"Red Hat applications"` | Application menu section. |
 | consoleLink.text | string | `"Red Hat Quay"` | Menu text. |
 | global.clusterDomain | string | `"example.com"` | OpenShift cluster base domain. Used in the console link when consoleLink.href is empty. The host is apps. plus this domain. |
-| job.image | string | `"quay.io/validatedpatterns/imperative-image:v1"` | Image for the S3 credentials Job. Uses the OpenShift cli ImageStream, which tracks the cluster version. Override when the internal registry is unavailable, for example ose-cli-rhel9:v4.20. |
+| job.image | string | `"quay.io/validatedpatterns/imperative-container:v1"` | Image for the S3 credentials Job. Uses the OpenShift cli ImageStream, which tracks the cluster version. Override when the internal registry is unavailable, for example ose-cli-rhel9:v4.20. |
 | job.resources.limits.cpu | string | `"500m"` |  |
 | job.resources.limits.memory | string | `"512Mi"` |  |
 | job.resources.requests.cpu | string | `"50m"` |  |
