@@ -1,0 +1,15 @@
+suite: QuayRegistry
+templates:
+  - templates/quay-registry.yaml
+tests:
+  - it: points QuayRegistry at the rendered secret
+    asserts:
+      - equal:
+          path: spec.configBundleSecret
+          value: quay-config-with-s3
+      - equal:
+          path: spec.components[6].kind
+          value: objectstorage
+      - equal:
+          path: spec.components[6].managed
+          value: false

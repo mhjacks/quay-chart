@@ -1,0 +1,15 @@
+{{- if .Values.configJob.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: quay-config-bootstrap
+  namespace: {{ .Values.quay.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "42"
+spec:
+  backoffLimit: {{ .Values.configJob.backoffLimit }}
+  activeDeadlineSeconds: {{ .Values.configJob.activeDeadlineSeconds }}
+  template:
+    spec:
+      {{- include "quay.config.podSpec" . | nindent 6 }}
+{{- end }}

@@ -13,6 +13,17 @@ This chart is used to serve as the template for Validated Patterns Charts
 
 ## Notable changes
 
+### 0.2.0
+
+- Standalone Multicloud Object Gateway is the default object storage
+  backend (`objectStorage.mode=mcg`). Set `objectStorage.mode=odf` to use
+  an existing OpenShift Data Foundation StorageCluster instead.
+- An OpenShift console link points at the Quay route and embeds the Quay icon.
+- Users, organizations, and repositories are applied by a Job and CronJob
+  using the `infra.quay_configuration` Ansible collection. Passwords are
+  projected with an ExternalSecret.
+- `quay.setup` and `quay_config` moved to `quayConfig`.
+
 {{ template "chart.homepageLine" . }}
 
 {{ template "chart.maintainersSection" . }}

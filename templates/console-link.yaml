@@ -1,0 +1,15 @@
+{{- if .Values.consoleLink.enabled }}
+apiVersion: console.openshift.io/v1
+kind: ConsoleLink
+metadata:
+  name: {{ .Values.consoleLink.name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "44"
+spec:
+  applicationMenu:
+    section: {{ .Values.consoleLink.section | quote }}
+    imageURL: {{ printf "data:image/png;base64,%s" (.Files.Get "files/quay-icon.png" | b64enc) | quote }}
+  href: {{ include "quay.console.href" . | quote }}
+  text: {{ .Values.consoleLink.text | quote }}
+  location: ApplicationMenu
+{{- end }}

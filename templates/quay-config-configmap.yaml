@@ -1,0 +1,21 @@
+{{- if .Values.configJob.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: quay-config
+  namespace: {{ .Values.quay.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "40"
+data:
+  requirements.yml: |
+    ---
+    collections:
+      - name: infra.quay_configuration
+        version: {{ .Values.configJob.collectionVersion | quote }}
+  playbook.yml: |
+{{- include "quay.config.playbook" . | trim | nindent 4 }}
+  install.sh: |
+{{- .Files.Get "files/quay-config-install.sh" | trim | nindent 4 }}
+  run.sh: |
+{{- .Files.Get "files/quay-config-run.sh" | trim | nindent 4 }}
+{{- end }}

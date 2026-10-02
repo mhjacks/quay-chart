@@ -1,0 +1,18 @@
+{{- if eq .Values.objectStorage.mode "mcg" }}
+apiVersion: noobaa.io/v1alpha1
+kind: BucketClass
+metadata:
+  name: {{ .Values.objectStorage.mcg.bucketClass.name }}
+  namespace: {{ .Values.objectStorage.mcg.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "34"
+spec:
+  placementPolicy:
+    tiers:
+      {{- range .Values.objectStorage.mcg.bucketClass.placement.tiers }}
+      - backingStores:
+        {{- range .backingStores }}
+          - {{ . }}
+        {{- end }}
+      {{- end }}
+{{- end }}

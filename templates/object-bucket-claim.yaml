@@ -1,11 +1,13 @@
----
+{{- if not (or (eq .Values.objectStorage.mode "mcg") (eq .Values.objectStorage.mode "odf")) }}
+{{- fail (printf "objectStorage.mode must be mcg or odf, got %q" .Values.objectStorage.mode) }}
+{{- end }}
 apiVersion: objectbucket.io/v1alpha1
 kind: ObjectBucketClaim
 metadata:
   name: {{ .Values.objectStorage.objectBucketClaim.name }}
   namespace: {{ .Values.quay.namespace }}
   annotations:
-    argocd.argoproj.io/sync-wave: "36"  # Create OBC after NooBaa system is ready
+    argocd.argoproj.io/sync-wave: "36"
 spec:
   generateBucketName: {{ .Values.objectStorage.objectBucketClaim.bucketName }}
   storageClassName: {{ .Values.objectStorage.objectBucketClaim.storageClass }}

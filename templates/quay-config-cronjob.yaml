@@ -1,0 +1,21 @@
+{{- if .Values.configJob.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: quay-config
+  namespace: {{ .Values.quay.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "43"
+spec:
+  schedule: {{ .Values.configJob.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: {{ .Values.configJob.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.configJob.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      backoffLimit: {{ .Values.configJob.backoffLimit }}
+      activeDeadlineSeconds: {{ .Values.configJob.activeDeadlineSeconds }}
+      template:
+        spec:
+          {{- include "quay.config.podSpec" . | nindent 10 }}
+{{- end }}

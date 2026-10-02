@@ -1,0 +1,24 @@
+suite: Ansible configuration cronjob
+templates:
+  - templates/quay-config-cronjob.yaml
+tests:
+  - it: reconciles on a cron schedule
+    asserts:
+      - isKind:
+          of: CronJob
+      - equal:
+          path: spec.schedule
+          value: "*/30 * * * *"
+      - equal:
+          path: spec.concurrencyPolicy
+          value: Forbid
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].name
+          value: configure-quay
+  - it: does not render when configuration is disabled
+    set:
+      configJob:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0

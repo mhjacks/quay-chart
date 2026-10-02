@@ -1,0 +1,18 @@
+{{- if eq .Values.objectStorage.mode "mcg" }}
+apiVersion: noobaa.io/v1alpha1
+kind: NooBaa
+metadata:
+  name: {{ .Values.objectStorage.mcg.system.name }}
+  namespace: {{ .Values.objectStorage.mcg.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "33"
+spec:
+  tolerations:
+    - key: "node.ocs.openshift.io/storage"
+      operator: "Equal"
+      value: "true"
+      effect: "NoSchedule"
+  dbVolumeResources:
+    requests:
+      storage: {{ .Values.objectStorage.mcg.dbSize }}
+{{- end }}

@@ -1,0 +1,21 @@
+{{- if eq .Values.objectStorage.mode "mcg" }}
+apiVersion: noobaa.io/v1alpha1
+kind: BackingStore
+metadata:
+  name: {{ .Values.objectStorage.mcg.backingStore.name }}
+  namespace: {{ .Values.objectStorage.mcg.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "32"
+spec:
+  type: pv-pool
+  pvPool:
+    numVolumes: {{ .Values.objectStorage.mcg.pvPool.numVolumes }}
+    resources:
+      requests:
+        cpu: {{ .Values.objectStorage.mcg.pvPool.resources.requests.cpu | quote }}
+        memory: {{ .Values.objectStorage.mcg.pvPool.resources.requests.memory | quote }}
+        storage: {{ .Values.objectStorage.mcg.pvPool.resources.requests.storage }}
+      limits:
+        cpu: {{ .Values.objectStorage.mcg.pvPool.resources.limits.cpu | quote }}
+        memory: {{ .Values.objectStorage.mcg.pvPool.resources.limits.memory | quote }}
+{{- end }}

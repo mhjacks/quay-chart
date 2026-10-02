@@ -1,0 +1,18 @@
+suite: Quay config bundle
+templates:
+  - templates/quay-config-bundle-secret.yaml
+tests:
+  - it: leaves storage placeholders for the credentials job
+    asserts:
+      - matchRegex:
+          path: stringData["config.yaml"]
+          pattern: PLACEHOLDER_BUCKET_HOST
+      - matchRegex:
+          path: stringData["config.yaml"]
+          pattern: PLACEHOLDER_BUCKET_PORT
+      - matchRegex:
+          path: stringData["config.yaml"]
+          pattern: PLACEHOLDER_IS_SECURE
+      - matchRegex:
+          path: stringData["config.yaml"]
+          pattern: "- quayadmin"

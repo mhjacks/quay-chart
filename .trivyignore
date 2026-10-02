@@ -1,8 +1,15 @@
 # AVD-KSV-0125: S3 job uses OpenShift built-in cli ImageStream (cluster-internal registry)
 AVD-KSV-0125
+# AVD-KSV-0013: same ImageStream reference has no fixed tag; it tracks the cluster
+AVD-KSV-0013
 # AVD-KSV-0113: S3 setup Role intentionally needs secret get/create/patch for quay config bundle
 AVD-KSV-0113
 # AVD-KSV-0020: Job uses OpenShift namespace default UID at runtime (high UID, no anyuid needed)
 AVD-KSV-0020
 # AVD-KSV-0021: Job uses OpenShift namespace default GID at runtime
 AVD-KSV-0021
+# AVD-KSV-0109: Ansible playbook parameter names (password) live in the ConfigMap.
+# Secret values are file lookups from an ExternalSecret, not literals.
+AVD-KSV-0109
+# AVD-KSV-01010: playbook also names usernames and emails. Those are not credentials.
+AVD-KSV-01010

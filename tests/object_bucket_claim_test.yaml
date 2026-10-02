@@ -1,0 +1,26 @@
+suite: ObjectBucketClaim
+templates:
+  - templates/object-bucket-claim.yaml
+tests:
+  - it: claims the NooBaa storage class by default
+    asserts:
+      - isKind:
+          of: ObjectBucketClaim
+      - equal:
+          path: spec.storageClassName
+          value: openshift-storage.noobaa.io
+      - equal:
+          path: spec.generateBucketName
+          value: quay-datastore
+      - equal:
+          path: metadata.name
+          value: quay-bucket
+  - it: honors a Ceph RGW storage class override
+    set:
+      objectStorage:
+        objectBucketClaim:
+          storageClass: ocs-storagecluster-ceph-rgw
+    asserts:
+      - equal:
+          path: spec.storageClassName
+          value: ocs-storagecluster-ceph-rgw

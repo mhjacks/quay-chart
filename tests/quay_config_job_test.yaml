@@ -1,0 +1,37 @@
+suite: Ansible configuration job
+templates:
+  - templates/quay-config-job.yaml
+tests:
+  - it: bootstraps configuration after the registry
+    asserts:
+      - isKind:
+          of: Job
+      - equal:
+          path: metadata.name
+          value: quay-config-bootstrap
+      - equal:
+          path: metadata.annotations["argocd.argoproj.io/sync-wave"]
+          value: "42"
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: quay-config
+      - equal:
+          path: spec.template.spec.initContainers[0].command[1]
+          value: /quay-config/install.sh
+      - equal:
+          path: spec.template.spec.containers[0].command[1]
+          value: /quay-config/run.sh
+  - it: skips collection install when the image already provides it
+    set:
+      configJob:
+        installCollection: false
+    asserts:
+      - notExists:
+          path: spec.template.spec.initContainers
+  - it: does not render when configuration is disabled
+    set:
+      configJob:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0

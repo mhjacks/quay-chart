@@ -1,0 +1,21 @@
+suite: Ansible configuration playbook
+templates:
+  - templates/quay-config-configmap.yaml
+tests:
+  - it: renders a playbook for the collection
+    asserts:
+      - matchRegex:
+          path: data["requirements.yml"]
+          pattern: infra.quay_configuration
+      - matchRegex:
+          path: data["playbook.yml"]
+          pattern: "quay_first_user:"
+      - matchRegex:
+          path: data["playbook.yml"]
+          pattern: "quay_organization:"
+      - matchRegex:
+          path: data["playbook.yml"]
+          pattern: "devel/example"
+      - matchRegex:
+          path: data["install.sh"]
+          pattern: "ansible-galaxy collection install"

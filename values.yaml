@@ -1,25 +1,32 @@
+global:
+  # -- OpenShift cluster base domain. Used in the console link when
+  # consoleLink.href is empty. The host is apps. plus this domain.
+  clusterDomain: example.com
+
 quay:
+  # -- Namespace for the Quay registry and its configuration jobs.
   namespace: quay-enterprise
+  # -- Name of the QuayRegistry resource. The managed route is this name
+  # with -quay appended.
+  name: quay-registry
   configBundleSecret:
     deploy: true
+    # -- Template secret. The S3 job copies it and fills storage placeholders.
     name: quay-init-config-bundle-secret
-  setup:
-    admin:
-      name: quayadmin
-      email: quayadmin@example.com
-    user:
-      name: developer1
-      email: developer1@myorg.com
+    # -- Secret QuayRegistry reads after the S3 job fills credentials.
+    s3Name: quay-config-with-s3
   storage:
     postgres:
-      size: 50Gi # Default and minimum size is 50 Gi
+      # -- Persistent volume size for the Quay PostgreSQL database.
+      size: 50Gi
     clairpostgres:
-      size: 50Gi # Default and minimum size is 50 Gi
+      # -- Persistent volume size for the Clair PostgreSQL database.
+      size: 50Gi
 
 job:
-  # Uses OpenShift built-in cli ImageStream; auto-updates with the cluster
-  # Override with e.g. registry.redhat.io/openshift4/ose-cli-rhel9:v4.20
-  # if the internal image registry is not available
+  # -- Image for the S3 credentials Job. Uses the OpenShift cli ImageStream,
+  # which tracks the cluster version. Override when the internal
+  # registry is unavailable, for example ose-cli-rhel9:v4.20.
   image: image-registry.openshift-image-registry.svc:5000/openshift/cli
   resources:
     requests:
@@ -29,15 +36,120 @@ job:
       cpu: 500m
       memory: 256Mi
 
-quay_config:
-  org:
-    name: devel
-    email: devel@myorg.com
-  repo: example
-
-# Object Storage configuration - using NooBaa MCG
+# Object storage. mode mcg deploys the standalone Multicloud Object Gateway.
+# mode odf uses the NooBaa gateway that a StorageCluster already created.
 objectStorage:
+  # -- mcg deploys the standalone Multicloud Object Gateway. odf consumes
+  # an existing OpenShift Data Foundation StorageCluster.
+  mode: mcg
+  mcg:
+    # -- Namespace of the NooBaa system. Must match the ODF operator namespace.
+    namespace: openshift-storage
+    system:
+      # -- Name of the NooBaa custom resource.
+      name: noobaa
+    bucketClass:
+      # -- BucketClass used by the default NooBaa storage class.
+      name: noobaa-default-bucket-class
+      placement:
+        tiers:
+          - backingStores:
+              - noobaa-default-backing-store
+    backingStore:
+      # -- BackingStore that holds the gateway's persistent volumes.
+      name: noobaa-default-backing-store
+    # -- Size of the NooBaa PostgreSQL volume.
+    dbSize: 50Gi
+    pvPool:
+      # -- Number of persistent volumes in the backing store pool.
+      numVolumes: 1
+      resources:
+        requests:
+          cpu: 800m
+          memory: 800Mi
+          storage: 50Gi
+        limits:
+          cpu: "1"
+          memory: 4Gi
   objectBucketClaim:
+    # -- ObjectBucketClaim name. The bound ConfigMap and Secret use this name.
     name: quay-bucket
+    # -- Prefix passed to generateBucketName.
     bucketName: quay-datastore
+    # -- StorageClass for the claim. Override for Ceph RGW, for example
+    # ocs-storagecluster-ceph-rgw.
     storageClass: openshift-storage.noobaa.io
+
+secretStore:
+  # -- SecretStore or ClusterSecretStore that holds Quay user passwords.
+  name: vault-backend
+  # -- Kind of secretStore.name.
+  kind: ClusterSecretStore
+
+quayConfig:
+  credentials:
+    # -- Vault (or other backend) path extracted into quay-config-credentials.
+    key: secret/data/hub/infra/quay/quay-users
+  # Exactly one user must set initialize, and that user must be a superuser.
+  # Organization names must be at least four characters. Repository names
+  # use the namespace/name form.
+  users:
+    - name: quayadmin
+      email: quayadmin@example.com
+      # -- Property on credentials.key projected into the credentials Secret.
+      passwordProperty: quay-admin-password
+      superuser: true
+      initialize: true
+    - name: developer1
+      email: developer1@myorg.com
+      passwordProperty: quay-user-password
+      superuser: false
+      initialize: false
+  organizations:
+    - name: devel
+      email: devel@myorg.com
+  repositories:
+    - name: devel/example
+      visibility: private
+
+consoleLink:
+  # -- Create an ApplicationMenu ConsoleLink for the Quay route.
+  enabled: true
+  # -- ConsoleLink metadata.name.
+  name: quay
+  # -- Menu text.
+  text: Red Hat Quay
+  # -- Application menu section.
+  section: Red Hat applications
+  # -- Override the computed route URL. Empty builds the managed route
+  # from quay.name, quay.namespace, and global.clusterDomain.
+  href: ""
+
+configJob:
+  # -- Run the bootstrap Job and the reconciling CronJob.
+  enabled: true
+  # -- Image with ansible-core, ansible-galaxy, oc, and cURL.
+  image: quay.io/hybridcloudpatterns/imperative-container:v1
+  imagePullPolicy: Always
+  # -- Cron schedule for re-applying Quay configuration.
+  schedule: "*/30 * * * *"
+  # -- Job activeDeadlineSeconds for the bootstrap Job and CronJob pods.
+  activeDeadlineSeconds: 1800
+  backoffLimit: 5
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  # -- Install infra.quay_configuration into an emptyDir before the playbook.
+  # Set false when configJob.image already contains the collection.
+  installCollection: true
+  # -- infra.quay_configuration version passed to ansible-galaxy.
+  collectionVersion: "2.8.1"
+  # -- Verify the Quay route TLS certificate. In-cluster routes often use
+  # a private CA, so the default is false.
+  validateCerts: false
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
