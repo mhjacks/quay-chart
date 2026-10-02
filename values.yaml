@@ -27,14 +27,14 @@ job:
   # -- Image for the S3 credentials Job. Uses the OpenShift cli ImageStream,
   # which tracks the cluster version. Override when the internal
   # registry is unavailable, for example ose-cli-rhel9:v4.20.
-  image: image-registry.openshift-image-registry.svc:5000/openshift/cli
+  image: "registry.redhat.io/openshift4/ose-cli-rhel9:latest"
   resources:
     requests:
       cpu: 50m
       memory: 128Mi
     limits:
       cpu: 500m
-      memory: 256Mi
+      memory: 512Mi
 
 # Object storage. mode mcg deploys the standalone Multicloud Object Gateway.
 # mode odf uses the NooBaa gateway that a StorageCluster already created.
