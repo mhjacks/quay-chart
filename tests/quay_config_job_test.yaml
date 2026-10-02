@@ -52,3 +52,10 @@ tests:
     asserts:
       - hasDocuments:
           count: 0
+  - it: does not render when quayConfig is disabled
+    set:
+      quayConfig:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0

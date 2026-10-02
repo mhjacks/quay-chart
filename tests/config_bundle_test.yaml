@@ -16,3 +16,14 @@ tests:
       - matchRegex:
           path: stringData["config.yaml"]
           pattern: "- quayadmin"
+  - it: still renders the bundle when quayConfig is disabled
+    set:
+      quayConfig:
+        enabled: false
+        users: []
+    asserts:
+      - isKind:
+          of: Secret
+      - matchRegex:
+          path: stringData["config.yaml"]
+          pattern: PLACEHOLDER_BUCKET_HOST

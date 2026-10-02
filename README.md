@@ -86,6 +86,7 @@ This chart is used to serve as the template for Validated Patterns Charts
 | quay.storage.clairpostgres.size | string | `"50Gi"` | Persistent volume size for the Clair PostgreSQL database. |
 | quay.storage.postgres.size | string | `"50Gi"` | Persistent volume size for the Quay PostgreSQL database. |
 | quayConfig.credentials.key | string | `"secret/data/hub/quay-users"` | Vault (or other backend) path extracted into quay-config-credentials. |
+| quayConfig.enabled | bool | `true` | Create the configuration Job, CronJob, and credential Secret. Set false to leave users, organizations, and repositories unmanaged. |
 | quayConfig.organizations | list | `[]` |  |
 | quayConfig.repositories | list | `[]` |  |
 | quayConfig.users[0].email | string | `"quayadmin@example.com"` |  |

@@ -1,4 +1,4 @@
-{{- if .Values.configJob.enabled }}
+{{- if and .Values.quayConfig.enabled .Values.configJob.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:

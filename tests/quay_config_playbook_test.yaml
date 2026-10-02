@@ -3,6 +3,25 @@ templates:
   - templates/quay-config-configmap.yaml
 tests:
   - it: renders a playbook for the collection
+    set:
+      quayConfig:
+        users:
+          - name: quayadmin
+            email: quayadmin@example.com
+            passwordProperty: quay-admin-password
+            superuser: true
+            initialize: true
+          - name: developer1
+            email: developer1@myorg.com
+            passwordProperty: quay-user-password
+            superuser: false
+            initialize: false
+        organizations:
+          - name: devel
+            email: devel@myorg.com
+        repositories:
+          - name: devel/example
+            visibility: private
     asserts:
       - matchRegex:
           path: data["requirements.yml"]
@@ -22,3 +41,10 @@ tests:
       - matchRegex:
           path: data["run.sh"]
           pattern: "ANSIBLE_REMOTE_TMP"
+  - it: does not render when quayConfig is disabled
+    set:
+      quayConfig:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0

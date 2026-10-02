@@ -86,6 +86,9 @@ secretStore:
   kind: ClusterSecretStore
 
 quayConfig:
+  # -- Create the configuration Job, CronJob, and credential Secret.
+  # Set false to leave users, organizations, and repositories unmanaged.
+  enabled: true
   credentials:
     # -- Vault (or other backend) path extracted into quay-config-credentials.
     key: secret/data/hub/quay-users
