@@ -24,10 +24,9 @@ quay:
       size: 50Gi
 
 job:
-  # -- Image for the S3 credentials Job. Uses the OpenShift cli ImageStream,
-  # which tracks the cluster version. Override when the internal
-  # registry is unavailable, for example ose-cli-rhel9:v4.20.
-  image: "quay.io/validatedpatterns/imperative-container:v1"
+  # -- Image for the S3 credentials Job. The Validated Patterns imperative
+  # container provides oc.
+  image: quay.io/validatedpatterns/imperative-container:v1
   resources:
     requests:
       cpu: 50m
@@ -139,7 +138,8 @@ configJob:
   # -- Run the bootstrap Job and the reconciling CronJob.
   enabled: true
   # -- Image with ansible-core, ansible-galaxy, oc, and cURL.
-  image: quay.io/hybridcloudpatterns/imperative-container:v1
+  # Same default as job.image. The container home is /pattern-home.
+  image: quay.io/validatedpatterns/imperative-container:v1
   imagePullPolicy: Always
   # -- Cron schedule for re-applying Quay configuration.
   schedule: "*/30 * * * *"

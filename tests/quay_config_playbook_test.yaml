@@ -19,3 +19,6 @@ tests:
       - matchRegex:
           path: data["install.sh"]
           pattern: "ansible-galaxy collection install"
+      - matchRegex:
+          path: data["run.sh"]
+          pattern: "ANSIBLE_REMOTE_TMP"

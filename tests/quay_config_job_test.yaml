@@ -21,6 +21,23 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].command[1]
           value: /quay-config/run.sh
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: quay.io/validatedpatterns/imperative-container:v1
+      - equal:
+          path: spec.template.spec.containers[0].env[5].name
+          value: HOME_DIR
+      - equal:
+          path: spec.template.spec.containers[0].env[5].value
+          value: /pattern-home
+      - equal:
+          path: spec.template.spec.volumes[1].name
+          value: work
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: work
+            mountPath: /pattern-home
   - it: skips collection install when the image already provides it
     set:
       configJob:

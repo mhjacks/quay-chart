@@ -41,7 +41,7 @@ This chart is used to serve as the template for Validated Patterns Charts
 | configJob.collectionVersion | string | `"2.8.1"` | infra.quay_configuration version passed to ansible-galaxy. |
 | configJob.enabled | bool | `true` | Run the bootstrap Job and the reconciling CronJob. |
 | configJob.failedJobsHistoryLimit | int | `1` |  |
-| configJob.image | string | `"quay.io/hybridcloudpatterns/imperative-container:v1"` | Image with ansible-core, ansible-galaxy, oc, and cURL. |
+| configJob.image | string | `"quay.io/validatedpatterns/imperative-container:v1"` | Image with ansible-core, ansible-galaxy, oc, and cURL. Same default as job.image. The container home is /pattern-home. |
 | configJob.imagePullPolicy | string | `"Always"` |  |
 | configJob.installCollection | bool | `true` | Install infra.quay_configuration into an emptyDir before the playbook. Set false when configJob.image already contains the collection. |
 | configJob.resources.limits.cpu | string | `"500m"` |  |
@@ -57,7 +57,7 @@ This chart is used to serve as the template for Validated Patterns Charts
 | consoleLink.section | string | `"Red Hat applications"` | Application menu section. |
 | consoleLink.text | string | `"Red Hat Quay"` | Menu text. |
 | global.clusterDomain | string | `"example.com"` | OpenShift cluster base domain. Used in the console link when consoleLink.href is empty. The host is apps. plus this domain. |
-| job.image | string | `"quay.io/validatedpatterns/imperative-container:v1"` | Image for the S3 credentials Job. Uses the OpenShift cli ImageStream, which tracks the cluster version. Override when the internal registry is unavailable, for example ose-cli-rhel9:v4.20. |
+| job.image | string | `"quay.io/validatedpatterns/imperative-container:v1"` | Image for the S3 credentials Job. The Validated Patterns imperative container provides oc. |
 | job.resources.limits.cpu | string | `"500m"` |  |
 | job.resources.limits.memory | string | `"512Mi"` |  |
 | job.resources.requests.cpu | string | `"50m"` |  |

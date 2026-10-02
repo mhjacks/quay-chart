@@ -177,9 +177,9 @@ initContainers:
       {{- toYaml .Values.configJob.resources | nindent 6 }}
     env:
       - name: COLLECTIONS_PATH
-        value: /quay-work/collections
+        value: /pattern-home/collections
       - name: HOME
-        value: /quay-work
+        value: /pattern-home
     command:
       - /bin/bash
       - /quay-config/install.sh
@@ -187,7 +187,7 @@ initContainers:
       - name: tmp
         mountPath: /tmp
       - name: work
-        mountPath: /quay-work
+        mountPath: /pattern-home
       - name: quay-config
         mountPath: /quay-config
         readOnly: true
@@ -210,9 +210,11 @@ containers:
       - name: VALIDATE_CERTS
         value: {{ .Values.configJob.validateCerts | quote }}
       - name: COLLECTIONS_PATH
-        value: /quay-work/collections
+        value: /pattern-home/collections
       - name: HOME_DIR
-        value: /quay-work
+        value: /pattern-home
+      - name: ANSIBLE_REMOTE_TMP
+        value: /pattern-home/.ansible/tmp
     command:
       - /bin/bash
       - /quay-config/run.sh
@@ -220,7 +222,7 @@ containers:
       - name: tmp
         mountPath: /tmp
       - name: work
-        mountPath: /quay-work
+        mountPath: /pattern-home
       - name: quay-config
         mountPath: /quay-config
         readOnly: true
