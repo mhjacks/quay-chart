@@ -39,7 +39,6 @@ This chart is used to serve as the template for Validated Patterns Charts
 | configJob.activeDeadlineSeconds | int | `1800` | Job activeDeadlineSeconds for the bootstrap Job and CronJob pods. |
 | configJob.backoffLimit | int | `5` |  |
 | configJob.collectionVersion | string | `"2.8.1"` | infra.quay_configuration version passed to ansible-galaxy. |
-| configJob.enabled | bool | `true` | Run the bootstrap Job and the reconciling CronJob. |
 | configJob.failedJobsHistoryLimit | int | `1` |  |
 | configJob.image | string | `"quay.io/validatedpatterns/imperative-container:v1"` | Image with ansible-core, ansible-galaxy, oc, and cURL. Same default as job.image. The container home is /pattern-home. |
 | configJob.imagePullPolicy | string | `"Always"` |  |
@@ -86,7 +85,7 @@ This chart is used to serve as the template for Validated Patterns Charts
 | quay.storage.clairpostgres.size | string | `"50Gi"` | Persistent volume size for the Clair PostgreSQL database. |
 | quay.storage.postgres.size | string | `"50Gi"` | Persistent volume size for the Quay PostgreSQL database. |
 | quayConfig.credentials.key | string | `"secret/data/hub/quay-users"` | Vault (or other backend) path extracted into quay-config-credentials. |
-| quayConfig.enabled | bool | `true` | Create the configuration Job, CronJob, and credential Secret. Set false to leave users, organizations, and repositories unmanaged. |
+| quayConfig.enabled | bool | `true` | Apply users, organizations, and repositories. Set false to skip the configuration Job, CronJob, ConfigMap, ExternalSecret, and RBAC. |
 | quayConfig.organizations | list | `[]` |  |
 | quayConfig.repositories | list | `[]` |  |
 | quayConfig.users[0].email | string | `"quayadmin@example.com"` |  |

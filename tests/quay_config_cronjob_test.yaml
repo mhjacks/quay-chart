@@ -15,13 +15,6 @@ tests:
       - equal:
           path: spec.jobTemplate.spec.template.spec.containers[0].name
           value: configure-quay
-  - it: does not render when configuration is disabled
-    set:
-      configJob:
-        enabled: false
-    asserts:
-      - hasDocuments:
-          count: 0
   - it: does not render when quayConfig is disabled
     set:
       quayConfig:

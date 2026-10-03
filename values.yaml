@@ -86,8 +86,8 @@ secretStore:
   kind: ClusterSecretStore
 
 quayConfig:
-  # -- Create the configuration Job, CronJob, and credential Secret.
-  # Set false to leave users, organizations, and repositories unmanaged.
+  # -- Apply users, organizations, and repositories. Set false to skip
+  # the configuration Job, CronJob, ConfigMap, ExternalSecret, and RBAC.
   enabled: true
   credentials:
     # -- Vault (or other backend) path extracted into quay-config-credentials.
@@ -138,8 +138,6 @@ consoleLink:
   href: ""
 
 configJob:
-  # -- Run the bootstrap Job and the reconciling CronJob.
-  enabled: true
   # -- Image with ansible-core, ansible-galaxy, oc, and cURL.
   # Same default as job.image. The container home is /pattern-home.
   image: quay.io/validatedpatterns/imperative-container:v1
